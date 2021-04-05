@@ -7,6 +7,8 @@ export default function ListRovers() {
 
     const [rovers, setRovers] = useState([]);
 
+    const [selectedRover, setSelectedRover] = useState({});
+
     const [numApiCalls, setNumApiCalls] = useState(0);
 
     const [apiError, setApiError] = useState();
@@ -65,21 +67,34 @@ export default function ListRovers() {
      });;
     },[])
 
+    const handleClick = (event, roverID) => {
+        event.preventDefault();
+        console.log('clicked on ' + roverID);
+        setSelectedRover(rovers.filter((rover) => rover.id == roverID)[0]);
+    }
+
+
     return (
         <>
             <h1>List Rovers</h1>
             <h4>api calls: {numApiCalls}</h4>
+            {/* API Error */}
             {apiError && 
                 <h4>There was an api error: {apiError}</h4>
             }
+            {/* End of API Error */}
+
             {/* Card Group for RoverCard components */}
             <div className="card-group">
                 {rovers.map(rover => (
-                    <RoverCard rover={rover}/>
+                    <RoverCard rover={rover} onClick={(event) => handleClick(event, rover.id)}/>
                 ))}
             </div>
             {/* End Card Group for RoverCard components*/}
-            <h4>Current Selected Rover: </h4>
+
+            {/* Selected Rover */}
+            <h4>Current Selected Rover: {selectedRover.name ? selectedRover.name : "None Selected"}</h4>
+            {/* End of Selected Rover */}
             {rovers.map(rover => (
                 <>
                     <h2>{rover.name}</h2>
@@ -101,24 +116,26 @@ export default function ListRovers() {
 }
 
 
-const RoverCard = ({ rover, children }) => (
-    <div
-    //   className={`card ${rover.status==='active' ? "border-success" : "border-secondary"}`}
-        className="card"
-    >
-        <div 
-            // className={`card-body ${rover.status==='active' ? "text-success" : "text-secondary"}`}
-            className="card-body"
+const RoverCard = ({ rover, onClick }) => {
+    
+    return (
+        <div
+        //   className={`card ${rover.status==='active' ? "border-success" : "border-secondary"}`}
+            className="card"
+            onClick={onClick}
         >
-            <h5 className="card-title">{rover.name}</h5>
-            <p className={`card-text ${rover.status==='active' ? "text-success" : "text-secondary"}`}>{rover.status}</p>
-        </div>
             <div 
-            // className={`card-footer ${rover.status==='active' ? "border-success" : "border-secondary"}`}
-                className="card-footer"
+                // className={`card-body ${rover.status==='active' ? "text-success" : "text-secondary"}`}
+                className="card-body"
             >
-            <small className="text-muted">Available Photos: {rover.total_photos}</small>
+                <h5 className="card-title">{rover.name}</h5>
+                <p className={`card-text ${rover.status==='active' ? "text-success" : "text-secondary"}`}>{rover.status}</p>
+            </div>
+                <div 
+                // className={`card-footer ${rover.status==='active' ? "border-success" : "border-secondary"}`}
+                    className="card-footer"
+                >
+                <small className="text-muted">Available Photos: {rover.total_photos}</small>
+            </div>
         </div>
-      {children}
-    </div>
-  );
+    )}
