@@ -76,59 +76,45 @@ export default function ListRovers() {
 
     return (
         <>
-            <h1>List Rovers</h1>
-            <h4>api calls: {numApiCalls}</h4>
-            {/* API Error */}
-            {apiError && 
-                <h4>There was an api error: {apiError}</h4>
-            }
-            {/* End of API Error */}
+            <div className="container">
+                <h1>List Rovers</h1>
+                <h4>api calls: {numApiCalls}</h4>
+                {/* API Error */}
+                {apiError && 
+                    <h4>There was an api error: {apiError}</h4>
+                }
+                {/* End of API Error */}
 
-            {/* Card Group for RoverCard components */}
-            <div className="card-group">
-                {rovers.map(rover => (
-                    <RoverCard rover={rover} onClick={(event) => handleClick(event, rover.id)}/>
-                ))}
-            </div>
-            {/* End Card Group for RoverCard components*/}
-
-            {/* Selected Rover */}
-                {/* <h4>Current Selected Rover: {selectedRover.name ? selectedRover.name : "None Selected"}</h4> */}
-            {/* End of Selected Rover */}
-
-            {/* Selected Rover Detail */}
-            {selectedRover && 
-            <>
-                <h2>{selectedRover.name}</h2>
-                <p>Landing Date: {selectedRover.landing_date}</p>
-                <p>Status: {selectedRover.status}</p>
-                <p>Total Photos: {selectedRover.total_photos}</p>
-                <ol>
-                    {selectedRover.cameras.map(camera => (
-                        <li key={camera.key}>
-                            <p>{camera.name} - {camera.full_name}</p>
-                        </li>
+                {/* Card Group for RoverCard components */}
+                <div className="card-group">
+                    {rovers.map(rover => (
+                        <RoverCard rover={rover} onClick={(event) => handleClick(event, rover.id)}/>
                     ))}
-                </ol>
-            </>
-            }
-            {/* End of Selected Rover Detail */}
+                </div>
+                {/* End Card Group for RoverCard components*/}
 
-            {/* {rovers.map(rover => (
+                {/* Selected Rover */}
+                    {/* <h4>Current Selected Rover: {selectedRover.name ? selectedRover.name : "None Selected"}</h4> */}
+                {/* End of Selected Rover */}
+
+                {/* Selected Rover Detail */}
+                {selectedRover && 
                 <>
-                    <h2>{rover.name}</h2>
-                    <p>Landing Date: {rover.landing_date}</p>
-                    <p>Status: {rover.status}</p>
-                    <p>Total Photos: {rover.total_photos}</p>
+                    <h2>{selectedRover.name}</h2>
+                    <p>Landing Date: {selectedRover.landing_date}</p>
+                    <p>Status: {selectedRover.status}</p>
+                    <p>Total Photos: {selectedRover.total_photos}</p>
                     <ol>
-                        {rover.cameras.map(camera => (
+                        {selectedRover.cameras.map(camera => (
                             <li key={camera.key}>
                                 <p>{camera.name} - {camera.full_name}</p>
                             </li>
                         ))}
                     </ol>
                 </>
-            ))} */}
+                }
+                {/* End of Selected Rover Detail */}
+            </div>
             
         </>
     )
