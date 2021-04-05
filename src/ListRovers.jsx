@@ -7,7 +7,7 @@ export default function ListRovers() {
 
     const [rovers, setRovers] = useState([]);
 
-    const [selectedRover, setSelectedRover] = useState({});
+    const [selectedRover, setSelectedRover] = useState({cameras: { map: () => {}}});
 
     const [numApiCalls, setNumApiCalls] = useState(0);
 
@@ -93,9 +93,28 @@ export default function ListRovers() {
             {/* End Card Group for RoverCard components*/}
 
             {/* Selected Rover */}
-            <h4>Current Selected Rover: {selectedRover.name ? selectedRover.name : "None Selected"}</h4>
+                {/* <h4>Current Selected Rover: {selectedRover.name ? selectedRover.name : "None Selected"}</h4> */}
             {/* End of Selected Rover */}
-            {rovers.map(rover => (
+
+            {/* Selected Rover Detail */}
+            {selectedRover && 
+            <>
+                <h2>{selectedRover.name}</h2>
+                <p>Landing Date: {selectedRover.landing_date}</p>
+                <p>Status: {selectedRover.status}</p>
+                <p>Total Photos: {selectedRover.total_photos}</p>
+                <ol>
+                    {selectedRover.cameras.map(camera => (
+                        <li key={camera.key}>
+                            <p>{camera.name} - {camera.full_name}</p>
+                        </li>
+                    ))}
+                </ol>
+            </>
+            }
+            {/* End of Selected Rover Detail */}
+
+            {/* {rovers.map(rover => (
                 <>
                     <h2>{rover.name}</h2>
                     <p>Landing Date: {rover.landing_date}</p>
@@ -109,7 +128,7 @@ export default function ListRovers() {
                         ))}
                     </ol>
                 </>
-            ))}
+            ))} */}
             
         </>
     )
