@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom'
 import axios from 'axios';
+
+import RoverPhotos from './RoverPhotos';
 
 const { REACT_APP_NASA_API_KEY } = process.env;
 
@@ -76,9 +79,9 @@ export default function ListRovers() {
 
     return (
         <>
-            <div className="container pt-3">
+            <div className="container">
                 {/* <h1>List Rovers</h1> */}
-                {/* <h4>api calls: {numApiCalls}</h4> */}
+                <h4>api calls: {numApiCalls}</h4>
                 {/* API Error */}
                 {apiError && 
                     <h4>There was an api error: {apiError}</h4>
@@ -86,7 +89,7 @@ export default function ListRovers() {
                 {/* End of API Error */}
 
                 {/* Card Group for RoverCard components */}
-                <div className="row">
+                <div className="row pt-3">
                     <div className="col">
                         <div className="card-group">
                             {rovers.map(rover => (
@@ -105,32 +108,31 @@ export default function ListRovers() {
                 {/* Selected Rover Detail */}
                 {selectedRover && 
                 <>
-                    <h2>{selectedRover.name}</h2>
-                    <p>Landing Date: {selectedRover.landing_date}</p>
-                    <p>Total Mission Time On Mars: </p>
-                    <p>Status: {selectedRover.status}</p>
-                    <p>Total Photos: {selectedRover.total_photos}</p>
-                    
+                    <div className="row  pt-3">
+                        <div className="col">
+                            <h2>{selectedRover.name}</h2>
+                            <p>Landing Date: {selectedRover.landing_date}</p>
+                            <p>Total Mission Time On Mars: </p>
+                            <p>Status: {selectedRover.status}</p>
+                            <p>Total Photos: {selectedRover.total_photos}</p>
+                            <Link to={selectedRover.name} className="btn btn-primary">View All Photos</Link>
+                        </div>
+                        <div className="col">
+                            <ol className="list-group list-group-numbered">
+                                {selectedRover.cameras.map(camera => (
+                                    <li key={camera.key} className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div className="ms-2 me-auto">
+                                        <div className="fw-bold"><strong>{camera.name}</strong></div>
+                                            <span className="text-secondary">{camera.full_name}</span>
+                                        </div>
+                                        <span className="badge bg-secondary rounded-pill">14</span>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
 
-                    <ol className="list-group list-group-numbered">
-                        {selectedRover.cameras.map(camera => (
-                            <li className="list-group-item d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                <div className="fw-bold"><strong>{camera.name}</strong></div>
-                                    <span className="text-secondary">{camera.full_name}</span>
-                                </div>
-                                <span className="badge bg-secondary rounded-pill">14</span>
-                            </li>
-                        ))}
-                    </ol>
+                    </div>
                     
-                    {/* <ol>
-                        {selectedRover.cameras.map(camera => (
-                            <li key={camera.key}>
-                                <p>{camera.name} - {camera.full_name}</p>
-                            </li>
-                        ))}
-                    </ol> */}
                 </>
                 }
                 {/* End of Selected Rover Detail */}
