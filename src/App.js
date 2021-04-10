@@ -10,7 +10,7 @@ import RoverPhotos from './RoverPhotos';
 
 // import Image from './static/img/oranges.jpg';
 
-const baseApi = "https://api.nasa.gov/mars-photos/api/v1/"
+// const baseApi = "https://api.nasa.gov/mars-photos/api/v1/"
 
 
 
