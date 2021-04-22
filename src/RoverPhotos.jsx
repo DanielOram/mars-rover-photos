@@ -5,8 +5,19 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-
 import Badge from 'react-bootstrap/Badge';
+
+
+import RangeSlider from 'react-bootstrap-range-slider';
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
+
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const { REACT_APP_NASA_API_KEY } = process.env;
 
@@ -69,6 +80,10 @@ const DisplayPhotos = (props) => {
     // toggle all filters on or off on button click
     const [toggleOn, setToggleOn] = useState(true);
 
+
+    const [ rangeSliderValue, setRangeSliderValue ] = useState(0); 
+    const [rangeSliderUnit, setRangeSliderUnit] = useState('Martian Sol');
+
     const [numApiCalls, setNumApiCalls] = useState(0);
 
     useEffect(() => {
@@ -102,6 +117,11 @@ const DisplayPhotos = (props) => {
     const handleFilterOptionsChange = (selectedValues) => {
         setFilterOptions(selectedValues);
     }
+
+    const handleSliderUnitChange=(selectedUnit)=>{
+        setRangeSliderUnit(selectedUnit);
+    }
+
 
     //process api data
     function processPhotoData(data) {
@@ -164,28 +184,62 @@ const DisplayPhotos = (props) => {
             <div className="container-fluid">
                 <h1>{props.match.params.rover} Photos</h1>
                 <h4>api calls: {numApiCalls}</h4>
-                <p>number of photos: {photos.length}</p>
-                {/* <p>filter options: </p>
-                {filterOptions.map(filter => {
-                    return <p>{filter}</p>;
-                })} */}
+                <p>number of cameras: {photos.length}</p>
+                
+                {/* <FilterViewOptions /> */}
+
+
                 
 
 
                 {!apiError && 
 
                     <>
-                        {/* Buttons for Cameras */}
-                        <p>Buttons for filtering photos by Camera</p>
-                        <div className="row pr-3 pb-2">
-                            <div className="pl-3 pr-3">
-                                {/* <label for="customRange1" className="form-label">Example range</label>
-                                <input type="range" className="form-range" id="customRange1"/>
 
-                                <label for="customRange2" className="form-label">Example range 2</label>
-                                <input type="range" className="form-range" id="customRange2"></input> */}
+                        {/* Slider for selecting sol/day */}
+                        {/* <div className="row pr-3 pb-2">
+                            <div className="col pl-3 pr-3">
+                                <RangeSlider
+                                    value={rangeSliderValue}
+                                    tooltipPlacement='top'
+                                    onChange={changeEvent => setRangeSliderValue(changeEvent.target.value)}
+                                />
+                                <SliderWithInputFormControl 
+                                    min={1}
+                                    max={1000}
+                                    unit={rangeSliderUnit}
+                                    onSelect={handleSliderUnitChange}
+                                />
+                                
                             </div>
-                        </div>
+                        </div> */}
+                        {/* End of Slider */}
+
+                        {/* <div className="row">
+                            <div className="col">
+                            <InputGroup className="mb-3">
+                                <DropdownButton
+                                    as={InputGroup.Prepend}
+                                    variant="outline-secondary"
+                                    title={rangeSliderUnit}
+                                    id="input-group-dropdown-1"
+                                    onSelect={handleSliderUnitChange}
+                                >
+                                    <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
+                                </DropdownButton>
+                                <FormControl
+                                    placeholder=""
+                                    aria-label="RangeSliderUnit"
+                                    aria-describedby="RangeSliderUnit"
+                                />
+                            </InputGroup>
+                            </div>
+                        </div> */}
+
+
+                        {/* Toggle Buttons for Filtering Photos by Camera */}
+                        <p>Buttons for filtering photos by Camera</p>
 
                         <div className="row pr-3 pb-2">
                             <div className="pl-3 pr-3">
@@ -229,66 +283,43 @@ const DisplayPhotos = (props) => {
                                 </ToggleButtonGroup>
                             </div>
                         </div>
+                        {/* End of ToggleButtons for Camera Filters */}
 
                         {/* Filter Images */}
-                        <div>
-                            {photos.filter(photo_group => {return filterOptions.includes(photo_group.camera) }).map(photo_group => {
-                                return (
-                                    <>
-                                    {/* <p>{photo_group.camera}</p> */}
-                                    {photo_group.photos.map(photo => (
+                        <div className="row">
+                            <div className="col">
+                                
+                                {photos.filter(photo_group => {return filterOptions.includes(photo_group.camera) }).map(photo_group => {
+                                    return (
                                         <>
-                                            <img key={photo.id} style={{ width: 50, height: 50}} src={photo.img_src} alt=""/>
+                                            
+                                            <div className="d-flex overflow-auto">
+                                                <div style={{zIndex: 1, position: 'absolute'}} className="m-2 text-white bg-primary rounded">
+                                                    {/* <div className="card-body"> */}
+                                                        <h5 className="m-1 ml-2 mr-2">{photo_group.camera}</h5>
+                                                    {/* </div> */}
+                                                </div>
+                                                {/* <p>{photo_group.camera}</p> */}
+                                                {photo_group.photos.map(photo => (
+                                                // <div className="">
+                                                    <img key={photo.id} style={{maxHeight: 200}} className="" src={photo.img_src} alt=""/>
+                                                // </div>
+                                                ))}
+                                            </div>
+                                        
                                         </>
-                                    ))}
-                                    </>
-                                    
-                                )
-                            })}
+                                        
+                                    )
+                                })}
+                            </div>
+                            
+                                
+                            
                         </div>
                         
-
-                        {/* Image list in Categories */}
-                        {/* <ul className="list-group list-group-flush">
-                            {photos.map(photo_group => (
-                                <li className="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h2>Camera: {photo_group.camera}</h2>
-                                        <h4>Full Name: {photo_group.name}</h4>
-                                        {photo_group.photos.map(photo => (
-                                            <>
-                                                <img style={{ width: 50}} src={photo.img_src} alt=""/>
-                                            </>
-                                        ))}
-                                    </div>
-                                    <span className="badge bg-secondary rounded-pill">{photo_group.photos.length}</span>
-
-                                    
-                                </li>
-                            ))}
-                        </ul> */}
                         
                     </>
 
-
-
-                    // Original photo list
-                    // <div className="row pt-3">
-                    //     {photos.map(photo => (
-                    //         <div className="col-2 pt-3">
-                    //             <div key={photo.key} className="card bg-dark text-white">
-                    //                 <img className="card-img img-fluid img-thumbnail" src={photo.img_src} alt="rover image"/>
-                    //                 <div className="card-img-overlay">
-                    //                     <h5 className="card-title">ID: {photo.id}</h5>
-                    //                     <p className="card-text">DATE: {photo.earth_date}</p>
-                    //                     <p className="card-text">CAMERA: {photo.camera.name}</p>
-                    //                 </div>
-                    //             </div>
-                    //         </div>
-                            
-                    //     ))}
-                    
-                    // </div>
                 }
 
                 {apiError && 
@@ -320,3 +351,87 @@ export default DisplayPhotos;
 //         </ToggleButtonGroup>
 //     )
 // }
+
+
+
+// Parent Component for all Filtering and View Options
+// is a row within the outer container
+
+const FilterViewOptions = (props) => {
+
+
+    return (
+        <div className="row">
+            <div className="col-sm-12">
+                <h2>Filter View Options</h2>
+            </div>
+            {/* RangeSlider for selecting Martian Sol */}
+            <div className="col-sm-12">
+                <MartianSolRangeSlider />
+            </div>
+
+            {/* Date selector for selecting Earth date */}
+            <div className="col-sm-12">
+                {/* <EarthDatePicker /> */}
+            </div>
+        </div>
+    );
+}
+
+
+const MartianSolRangeSlider = (props) => {
+    return (
+        <h3>MartianSolRangeSlider</h3>
+    )
+}
+
+const EarthDatePicker = (props) => {
+
+    return (
+        <>
+            <h3>DatePicker</h3>
+        </>
+    );
+}
+
+
+const SliderWithInputFormControl = (props) => {
+
+    const initialSliderValue = 1;
+    const [ value, setValue ] = React.useState(initialSliderValue);
+    const [ finalValue, setFinalValue ] = React.useState(initialSliderValue);
+  
+    return (
+      <Form>
+        <Form.Group as={Row}>
+          <Col xs="9">
+            <RangeSlider
+              min={props.min}
+              max={props.max}
+              value={value}
+              tooltipPlacement='top'
+              onChange={e => setValue(e.target.value)}
+              onAfterChange={e => setFinalValue(e.target.value)}
+            />
+          </Col>
+          <Col xs="3">
+          <InputGroup className="mb-3">
+            <DropdownButton
+                as={InputGroup.Prepend}
+                variant="outline-secondary"
+                title={props.unit}
+                id="input-group-dropdown-1"
+                onSelect={props.onSelect}
+            >
+                <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
+                <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
+            </DropdownButton>
+            <Form.Control value={finalValue}/>
+          </InputGroup>
+          
+          </Col>
+        </Form.Group>
+      </Form>
+    );
+  
+  };
