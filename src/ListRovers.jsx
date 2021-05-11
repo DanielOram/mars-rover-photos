@@ -156,7 +156,7 @@ const RoverCard = ({ rover, onClick }) => {
                 className="card-body"
             >
                 <h5 className="card-title">{rover.name}</h5>
-                <p className={`card-text ${rover.status==='active' ? "text-success" : "text-secondary"}`}>{rover.status}</p>
+                <p className="card-text">Mission Status: <span className={`card-text ${rover.status==='active' ? "text-success" : "text-secondary"}`}>{rover.status}</span> </p>
             </div>
                 <div 
                 // className={`card-footer ${rover.status==='active' ? "border-success" : "border-secondary"}`}

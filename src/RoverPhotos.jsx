@@ -19,6 +19,10 @@ import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
+import Collapse from 'react-bootstrap/Collapse';
+import Fade from 'react-bootstrap/Fade';
+import Card from 'react-bootstrap/Card';
+
 const { REACT_APP_NASA_API_KEY } = process.env;
 
 
@@ -76,21 +80,25 @@ const DisplayPhotos = (props) => {
     const [apiError, setApiError] = useState(null);
 
     // filterOptions is an array of all available cameras that have photos
-    const [filterOptions, setFilterOptions] = useState(['test 1', 'test 3']);
+    const [filterOptions, setFilterOptions] = useState([]);
     // toggle all filters on or off on button click
     const [toggleOn, setToggleOn] = useState(true);
 
+    const [sol, setSol] = useState(1);
+    // const [earthDay, setEarthDay] = useState(null);
+
 
     const [ rangeSliderValue, setRangeSliderValue ] = useState(0); 
-    const [rangeSliderUnit, setRangeSliderUnit] = useState('Martian Sol');
+    // const [rangeSliderUnit, setRangeSliderUnit] = useState('Martian Sol');
 
     const [numApiCalls, setNumApiCalls] = useState(0);
 
     useEffect(() => {
+        // console.log('useEffect called: ' + sol);
         axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/${props.match.params.rover.toLowerCase()}/photos`, {
             params: {
                 "api_key": REACT_APP_NASA_API_KEY,
-                "sol": 1
+                "sol": sol
             }
         })
       .then(res => {
@@ -112,14 +120,19 @@ const DisplayPhotos = (props) => {
       .catch(error => {
           setApiError(error.message);
       });
-    },[])
+    },[sol])
 
     const handleFilterOptionsChange = (selectedValues) => {
         setFilterOptions(selectedValues);
     }
 
-    const handleSliderUnitChange=(selectedUnit)=>{
-        setRangeSliderUnit(selectedUnit);
+    // const handleSliderUnitChange = (selectedUnit) => {
+    //     setRangeSliderUnit(selectedUnit);
+    // }
+
+    const handleSolSliderChange = (e) => {
+        console.log('sol = ' + e.target.value);
+        setSol(e.target.value);
     }
 
 
@@ -181,7 +194,7 @@ const DisplayPhotos = (props) => {
 
     return (
         <>
-            <div className="container-fluid">
+            <div className="container">
                 <h1>{props.match.params.rover} Photos</h1>
                 <h4>api calls: {numApiCalls}</h4>
                 <p>number of cameras: {photos.length}</p>
@@ -189,58 +202,37 @@ const DisplayPhotos = (props) => {
                 {/* <FilterViewOptions /> */}
 
 
-                
-
 
                 {!apiError && 
 
                     <>
 
                         {/* Slider for selecting sol/day */}
-                        {/* <div className="row pr-3 pb-2">
+                        <div className="row pr-3 mb-2">
                             <div className="col pl-3 pr-3">
-                                <RangeSlider
+                                {/* <RangeSlider
                                     value={rangeSliderValue}
                                     tooltipPlacement='top'
                                     onChange={changeEvent => setRangeSliderValue(changeEvent.target.value)}
-                                />
+                                /> */}
                                 <SliderWithInputFormControl 
                                     min={1}
                                     max={1000}
-                                    unit={rangeSliderUnit}
-                                    onSelect={handleSliderUnitChange}
+                                    initial={sol}
+                                    // unit={rangeSliderUnit}
+                                    sliderValue={sol}
+                                    onSliderChange={handleSolSliderChange}
+                                    // onSelect={handleSliderUnitChange}
                                 />
                                 
                             </div>
-                        </div> */}
+                        </div>
                         {/* End of Slider */}
 
-                        {/* <div className="row">
-                            <div className="col">
-                            <InputGroup className="mb-3">
-                                <DropdownButton
-                                    as={InputGroup.Prepend}
-                                    variant="outline-secondary"
-                                    title={rangeSliderUnit}
-                                    id="input-group-dropdown-1"
-                                    onSelect={handleSliderUnitChange}
-                                >
-                                    <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
-                                </DropdownButton>
-                                <FormControl
-                                    placeholder=""
-                                    aria-label="RangeSliderUnit"
-                                    aria-describedby="RangeSliderUnit"
-                                />
-                            </InputGroup>
-                            </div>
-                        </div> */}
+                        
 
 
                         {/* Toggle Buttons for Filtering Photos by Camera */}
-                        <p>Buttons for filtering photos by Camera</p>
-
                         <div className="row pr-3 pb-2">
                             <div className="pl-3 pr-3">
                                 {/* Button to toggle all filters on or off */}
@@ -285,6 +277,8 @@ const DisplayPhotos = (props) => {
                         </div>
                         {/* End of ToggleButtons for Camera Filters */}
 
+                        
+
                         {/* Filter Images */}
                         <div className="row">
                             <div className="col">
@@ -302,7 +296,7 @@ const DisplayPhotos = (props) => {
                                                 {/* <p>{photo_group.camera}</p> */}
                                                 {photo_group.photos.map(photo => (
                                                 // <div className="">
-                                                    <img key={photo.id} style={{maxHeight: 200}} className="" src={photo.img_src} alt=""/>
+                                                    <img key={photo.id} style={{maxHeight: 200}} className="mr-1 mb-1" src={photo.img_src} alt=""/>
                                                 // </div>
                                                 ))}
                                             </div>
@@ -397,26 +391,34 @@ const EarthDatePicker = (props) => {
 
 const SliderWithInputFormControl = (props) => {
 
-    const initialSliderValue = 1;
-    const [ value, setValue ] = React.useState(initialSliderValue);
-    const [ finalValue, setFinalValue ] = React.useState(initialSliderValue);
+    const initialSliderValue = props.initial;
+    const [ value, setValue ] = useState(initialSliderValue);
+    // const [ finalValue, setFinalValue ] = useState(initialSliderValue);
+
+    // const handleChange = (e) => setValue(e.target.value);
+
+    // function handleChange(e) {
+    //     setValue(e.target.value);
+    // }
   
     return (
       <Form>
         <Form.Group as={Row}>
-          <Col xs="9">
+          <Col xs="10" className="pr-0">
             <RangeSlider
               min={props.min}
               max={props.max}
               value={value}
               tooltipPlacement='top'
+            //   onChange = {props.onChange}
               onChange={e => setValue(e.target.value)}
-              onAfterChange={e => setFinalValue(e.target.value)}
+            //   onChange={handleChange}
+              onAfterChange={props.onSliderChange}
             />
           </Col>
-          <Col xs="3">
-          <InputGroup className="mb-3">
-            <DropdownButton
+          <Col xs="2"  className="pr-0">
+          <InputGroup>
+            {/* <DropdownButton
                 as={InputGroup.Prepend}
                 variant="outline-secondary"
                 title={props.unit}
@@ -425,8 +427,8 @@ const SliderWithInputFormControl = (props) => {
             >
                 <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
                 <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
-            </DropdownButton>
-            <Form.Control value={finalValue}/>
+            </DropdownButton> */}
+            <Form.Control value={props.sliderValue}/>
           </InputGroup>
           
           </Col>
@@ -435,3 +437,58 @@ const SliderWithInputFormControl = (props) => {
     );
   
   };
+
+
+
+  {/* <div className="row">
+    <div className="col">
+    <InputGroup className="mb-3">
+        <DropdownButton
+            as={InputGroup.Prepend}
+            variant="outline-secondary"
+            title={rangeSliderUnit}
+            id="input-group-dropdown-1"
+            onSelect={handleSliderUnitChange}
+        >
+            <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
+            <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
+        </DropdownButton>
+        <FormControl
+            placeholder=""
+            aria-label="RangeSliderUnit"
+            aria-describedby="RangeSliderUnit"
+        />
+    </InputGroup>
+    </div>
+</div> */}
+
+
+{/* Display Options buttons */}
+{/* <div className="row pb-2">
+    <div className="col pb-3">
+        <ToggleButtonGroup
+            type='checkbox'
+            name='photo-display-options'
+            defaultValue={[]}
+            value={['display option']}  
+            style={{display: 'flex'}}                                  
+        >
+            <ToggleButton 
+                value={1}
+            >
+                display option 1
+            </ToggleButton>
+            <ToggleButton 
+                value={2}
+            >
+                display option 2
+            </ToggleButton>
+            <ToggleButton 
+                value={3}
+            >
+                display option 3
+            </ToggleButton>
+        </ToggleButtonGroup>
+    </div>
+</div> */}
+{/* End of Display Options buttons */}
