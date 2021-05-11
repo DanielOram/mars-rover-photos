@@ -86,11 +86,6 @@ const DisplayPhotos = (props) => {
     const [toggleOn, setToggleOn] = useState(true);
 
     const [sol, setSol] = useState(1);
-    // const [earthDay, setEarthDay] = useState(null);
-
-
-    // const [ rangeSliderValue, setRangeSliderValue ] = useState(0); 
-    // const [rangeSliderUnit, setRangeSliderUnit] = useState('Martian Sol');
 
     const [numApiCalls, setNumApiCalls] = useState(0);
 
@@ -108,7 +103,6 @@ const DisplayPhotos = (props) => {
 
     useEffect(() => {
         getPhotos();
-        
     },[sol]);
 
     const getPhotos = () => {
@@ -120,10 +114,6 @@ const DisplayPhotos = (props) => {
             }
         })
       .then(res => {
-        // alert('Response: ' + JSON.stringify(res,'',2));
-        // setPhotos(res.data.photos.map(photo => (
-        //     photo.img_src
-        // )));
         setPhotos(() => {
             const photo_objects = processPhotoData(res.data);
             
@@ -144,12 +134,7 @@ const DisplayPhotos = (props) => {
         setFilterOptions(selectedValues);
     }
 
-    // const handleSliderUnitChange = (selectedUnit) => {
-    //     setRangeSliderUnit(selectedUnit);
-    // }
-
     const handleSolSliderChange = (e) => {
-        console.log('sol = ' + e.target.value);
         setSol(e.target.value);
     }
 
@@ -224,15 +209,9 @@ const DisplayPhotos = (props) => {
                 {!apiError && 
 
                     <>
-
                         {/* Slider for selecting sol/day */}
                         <div className="row pr-3 mb-2">
                             <div className="col pl-3 pr-3">
-                                {/* <RangeSlider
-                                    value={rangeSliderValue}
-                                    tooltipPlacement='top'
-                                    onChange={changeEvent => setRangeSliderValue(changeEvent.target.value)}
-                                /> */}
                                 <SliderWithInputFormControl 
                                     min={1}
                                     max={selectedRover ? selectedRover.max_sol : 1}
@@ -240,7 +219,6 @@ const DisplayPhotos = (props) => {
                                     // unit={rangeSliderUnit}
                                     sliderValue={sol}
                                     onSliderChange={handleSolSliderChange}
-                                    // onSelect={handleSliderUnitChange}
                                 />
                                 
                             </div>
@@ -283,7 +261,7 @@ const DisplayPhotos = (props) => {
                                     onChange={handleFilterOptionsChange}
                                 >
                                    {photos.map(photo_group => (
-                                            <ToggleButton value={photo_group.camera} className="d-flex justify-content-between align-items-start" variant="outline-primary">
+                                            <ToggleButton key={photo_group.camera} value={photo_group.camera} className="d-flex justify-content-between align-items-start" variant="outline-primary">
                                                 <Badge variant="secondary" pill>{photo_group.photos.length} photos</Badge>
                                                 <span className="pl-2">{photo_group.camera}</span>
                                             </ToggleButton>
@@ -305,7 +283,7 @@ const DisplayPhotos = (props) => {
                                     return (
                                         <>
                                             
-                                            <div className="d-flex overflow-auto">
+                                            <div key={photo_group.camera} className="d-flex overflow-auto">
                                                 <div style={{zIndex: 1, position: 'absolute'}} className="m-2 text-white bg-primary rounded">
                                                     {/* <div className="card-body"> */}
                                                         <h5 className="m-1 ml-2 mr-2">{photo_group.camera}</h5>
@@ -328,7 +306,7 @@ const DisplayPhotos = (props) => {
                                 
                             
                         </div>
-                        
+                        {/* End of Filter Images */}
                         
                     </>
 
@@ -351,73 +329,10 @@ const DisplayPhotos = (props) => {
 export default DisplayPhotos;
 
 
-
-// const CameraFilterButtonGroup = () => {
-//     return (
-//         <ToggleButtonGroup type='checkbox' name='cameras' defaultValue={[]} size="sm" vertical>
-//             {photos.map(photo_group => (
-//                     <ToggleButton value={photo_group.camera} className="d-flex justify-content-between align-items-start" variant="outline-primary">
-//                         {photo_group.camera}<Badge variant="light" className="">{photo_group.photos.length}</Badge>
-//                     </ToggleButton>
-//             ))}
-//         </ToggleButtonGroup>
-//     )
-// }
-
-
-
-// Parent Component for all Filtering and View Options
-// is a row within the outer container
-
-// const FilterViewOptions = (props) => {
-
-
-//     return (
-//         <div className="row">
-//             <div className="col-sm-12">
-//                 <h2>Filter View Options</h2>
-//             </div>
-//             {/* RangeSlider for selecting Martian Sol */}
-//             <div className="col-sm-12">
-//                 <MartianSolRangeSlider />
-//             </div>
-
-//             {/* Date selector for selecting Earth date */}
-//             <div className="col-sm-12">
-//                 {/* <EarthDatePicker /> */}
-//             </div>
-//         </div>
-//     );
-// }
-
-
-// const MartianSolRangeSlider = (props) => {
-//     return (
-//         <h3>MartianSolRangeSlider</h3>
-//     )
-// }
-
-// const EarthDatePicker = (props) => {
-
-//     return (
-//         <>
-//             <h3>DatePicker</h3>
-//         </>
-//     );
-// }
-
-
 const SliderWithInputFormControl = (props) => {
 
     const initialSliderValue = props.initial;
     const [ value, setValue ] = useState(initialSliderValue);
-    // const [ finalValue, setFinalValue ] = useState(initialSliderValue);
-
-    // const handleChange = (e) => setValue(e.target.value);
-
-    // function handleChange(e) {
-    //     setValue(e.target.value);
-    // }
   
     return (
       <Form>
@@ -428,24 +343,12 @@ const SliderWithInputFormControl = (props) => {
               max={props.max}
               value={value}
               tooltipPlacement='top'
-            //   onChange = {props.onChange}
               onChange={e => setValue(e.target.value)}
-            //   onChange={handleChange}
               onAfterChange={props.onSliderChange}
             />
           </Col>
           <Col xs="2"  className="pr-0">
           <InputGroup>
-            {/* <DropdownButton
-                as={InputGroup.Prepend}
-                variant="outline-secondary"
-                title={props.unit}
-                id="input-group-dropdown-1"
-                onSelect={props.onSelect}
-            >
-                <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
-                <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
-            </DropdownButton> */}
             <Form.Control 
                 value={props.sliderValue} 
                 onChange={(e) => {
@@ -460,58 +363,3 @@ const SliderWithInputFormControl = (props) => {
     );
   
   };
-
-
-
-  {/* <div className="row">
-    <div className="col">
-    <InputGroup className="mb-3">
-        <DropdownButton
-            as={InputGroup.Prepend}
-            variant="outline-secondary"
-            title={rangeSliderUnit}
-            id="input-group-dropdown-1"
-            onSelect={handleSliderUnitChange}
-        >
-            <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
-            <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
-        </DropdownButton>
-        <FormControl
-            placeholder=""
-            aria-label="RangeSliderUnit"
-            aria-describedby="RangeSliderUnit"
-        />
-    </InputGroup>
-    </div>
-</div> */}
-
-
-{/* Display Options buttons */}
-{/* <div className="row pb-2">
-    <div className="col pb-3">
-        <ToggleButtonGroup
-            type='checkbox'
-            name='photo-display-options'
-            defaultValue={[]}
-            value={['display option']}  
-            style={{display: 'flex'}}                                  
-        >
-            <ToggleButton 
-                value={1}
-            >
-                display option 1
-            </ToggleButton>
-            <ToggleButton 
-                value={2}
-            >
-                display option 2
-            </ToggleButton>
-            <ToggleButton 
-                value={3}
-            >
-                display option 3
-            </ToggleButton>
-        </ToggleButtonGroup>
-    </div>
-</div> */}
-{/* End of Display Options buttons */}
