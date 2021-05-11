@@ -88,6 +88,7 @@ const DisplayPhotos = (props) => {
     const [sol, setSol] = useState(1);
 
     const [numApiCalls, setNumApiCalls] = useState(0);
+    const [photosLoaded, setPhotosLoaded] = useState(false);
 
     const { rovers, selectedRover, setSelectedRover } = useContext(RoversContext);
 
@@ -106,6 +107,7 @@ const DisplayPhotos = (props) => {
     },[sol]);
 
     const getPhotos = () => {
+        setPhotosLoaded(false);
         // Call to get photos
         axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/${props.match.params.rover.toLowerCase()}/photos`, {
             params: {
@@ -123,6 +125,7 @@ const DisplayPhotos = (props) => {
         });
         
         setNumApiCalls((prev) => prev + 1);
+        setPhotosLoaded(true);
         setApiError(null);
       })
       .catch(error => {
@@ -282,23 +285,9 @@ const DisplayPhotos = (props) => {
                                 {photos.filter(photo_group => {return filterOptions.includes(photo_group.camera) }).map(photo_group => {
                                     return (
                                         <>
-                                            
-                                            <div key={photo_group.camera} className="d-flex overflow-auto">
-                                                <div style={{zIndex: 1, position: 'absolute'}} className="m-2 text-white bg-primary rounded">
-                                                    {/* <div className="card-body"> */}
-                                                        <h5 className="m-1 ml-2 mr-2">{photo_group.camera}</h5>
-                                                    {/* </div> */}
-                                                </div>
-                                                {/* <p>{photo_group.camera}</p> */}
-                                                {photo_group.photos.map(photo => (
-                                                // <div className="">
-                                                    <img key={photo.id} style={{maxHeight: 200}} className="mr-1 mb-1" src={photo.img_src} alt=""/>
-                                                // </div>
-                                                ))}
-                                            </div>
-                                        
+                                            {photosLoaded ? (<h1>images loaded</h1>) : (<h1>images loading</h1>)}
+                                            <CameraPhotoList photo_group={photo_group} isLoaded={photosLoaded}/>
                                         </>
-                                        
                                     )
                                 })}
                             </div>
@@ -323,10 +312,55 @@ const DisplayPhotos = (props) => {
             </div>
         </>
     )
-}
+};
 
 
 export default DisplayPhotos;
+
+
+const CameraPhotoList = ({ photo_group, isLoaded }) => {
+
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const handleClick = (event) => {
+        event.preventDefault();
+        console.log('clicked');
+        setIsExpanded((prev) => !prev);
+    }
+
+    return (
+        // height of this div makes images slightly smaller
+        <div key={photo_group.camera} className="d-flex overflow-auto" style={{height: 200}}>
+            <div 
+                onClick={handleClick} 
+                style={{zIndex: 1, position: 'absolute', cursor: 'pointer'}} 
+                className="m-2 text-white bg-primary rounded"
+            >
+                <h5 className="m-1 ml-2 mr-2">{photo_group.camera}{isExpanded && <> - {photo_group.name}</>}</h5>
+            </div>
+            {/* {isLoaded ? (
+                <>
+                    {photo_group.photos.map(photo => (
+                        <Photo photo={photo} />
+                    ))}
+                </>
+            ) : (
+                <h1>Spinning loader..</h1>
+            )} */}
+            {photo_group.photos.map(photo => (
+                <Photo photo={photo} />
+            ))}
+
+            
+        </div>
+    )
+};
+
+const Photo = ({ photo }) => {
+    return (
+        <img key={photo.id} style={{maxHeight: 200}} className="mr-1 mb-1" src={photo.img_src} alt=""/>
+    );
+}
 
 
 const SliderWithInputFormControl = (props) => {
