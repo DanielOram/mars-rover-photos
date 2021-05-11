@@ -1,74 +1,59 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext } from 'react';
 import { Link } from 'react-router-dom'
-import axios from 'axios';
+// import axios from 'axios';
 
-import RoverPhotos from './RoverPhotos';
+import { RoversContext } from './contexts';
 
-const { REACT_APP_NASA_API_KEY } = process.env;
+// import RoverPhotos from './RoverPhotos';
+
+// const { REACT_APP_NASA_API_KEY } = process.env;
 
 export default function ListRovers() {
 
-    const [rovers, setRovers] = useState([]);
+    // const [rovers, setRovers] = useState([]);
 
     const [selectedRover, setSelectedRover] = useState({cameras: { map: () => {}}});
 
-    const [numApiCalls, setNumApiCalls] = useState(0);
+    // const [numApiCalls, setNumApiCalls] = useState(0);
 
-    const [apiError, setApiError] = useState();
+    // const [apiError, setApiError] = useState();
 
-    const json = {
-        "id": 5,
-        "name": "Curiosity",
-        "landing_date": "2012-08-06",
-        "launch_date": "2011-11-26",
-        "status": "active",
-        "max_sol": 3078,
-        "max_date": "2021-04-03",
-        "total_photos": 484318,
-        "cameras": [
-            {
-                "id": 20,
-                "name": "FHAZ",
-                "rover_id": 5,
-                "full_name": "Front Hazard Avoidance Camera"
-            }
-        ]
-    }
+    const { rovers } = useContext(RoversContext);
 
-    useEffect(() => {
-        axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers`, {
-            params: {
-                "api_key": REACT_APP_NASA_API_KEY
-            }
-        })
-      .then(res => {
-        setRovers(res.data.rovers.map(rover => (
-            {
-                id: rover.id,
-                name: rover.name,
-                landing_date: rover.landing_date,
-                launch_date: rover.launch_date,
-                status: rover.status,
-                max_sol: rover.max_sol,
-                max_date: rover.max_date,
-                total_photos: rover.total_photos,
-                cameras: rover.cameras.map(camera => (
-                    {
-                        id: camera.id,
-                        name: camera.name,
-                        rover_id: camera.rover_id,
-                        full_name: camera.full_name
-                    }
-                ))
-            }
-        )))
-        setNumApiCalls((prev) => prev + 1);
-      })
-      .catch(error => {
-        console.log(error.response.data.error);
-        setApiError(error);
-     });;
-    },[])
+    // useEffect(() => {
+    //     axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers`, {
+    //         params: {
+    //             "api_key": REACT_APP_NASA_API_KEY
+    //         }
+    //     })
+    //   .then(res => {
+    //     setRovers(res.data.rovers.map(rover => (
+    //         {
+    //             id: rover.id,
+    //             name: rover.name,
+    //             landing_date: rover.landing_date,
+    //             launch_date: rover.launch_date,
+    //             status: rover.status,
+    //             max_sol: rover.max_sol,
+    //             max_date: rover.max_date,
+    //             total_photos: rover.total_photos,
+    //             cameras: rover.cameras.map(camera => (
+    //                 {
+    //                     id: camera.id,
+    //                     name: camera.name,
+    //                     rover_id: camera.rover_id,
+    //                     full_name: camera.full_name
+    //                 }
+    //             ))
+    //         }
+    //     )))
+    //     setNumApiCalls((prev) => prev + 1);
+    //   })
+    //   .catch(error => {
+    //     console.log(error.response.data.error);
+    //     setApiError(error);
+    //  });;
+    // },[])
 
     const handleClick = (event, roverID) => {
         event.preventDefault();
@@ -81,11 +66,11 @@ export default function ListRovers() {
         <>
             <div className="container">
                 {/* <h1>List Rovers</h1> */}
-                <h4>api calls: {numApiCalls}</h4>
+                {/* <h4>api calls: {numApiCalls}</h4> */}
                 {/* API Error */}
-                {apiError && 
+                {/* {apiError && 
                     <h4>There was an api error: {apiError}</h4>
-                }
+                } */}
                 {/* End of API Error */}
 
                 {/* Card Group for RoverCard components */}
