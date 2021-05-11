@@ -107,7 +107,11 @@ const DisplayPhotos = (props) => {
     },[rovers]);
 
     useEffect(() => {
+        getPhotos();
+        
+    },[sol]);
 
+    const getPhotos = () => {
         // Call to get photos
         axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/${props.match.params.rover.toLowerCase()}/photos`, {
             params: {
@@ -134,7 +138,7 @@ const DisplayPhotos = (props) => {
       .catch(error => {
           setApiError(error.message);
       });
-    },[sol])
+    }
 
     const handleFilterOptionsChange = (selectedValues) => {
         setFilterOptions(selectedValues);
@@ -442,7 +446,12 @@ const SliderWithInputFormControl = (props) => {
                 <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
                 <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
             </DropdownButton> */}
-            <Form.Control value={props.sliderValue} onChange={props.onSliderChange}/>
+            <Form.Control 
+                value={props.sliderValue} 
+                onChange={(e) => {
+                    props.onSliderChange(e);
+                    setValue(e.target.value);
+                }}/>
           </InputGroup>
           
           </Col>
