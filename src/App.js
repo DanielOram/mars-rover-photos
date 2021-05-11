@@ -21,7 +21,9 @@ const { REACT_APP_NASA_API_KEY } = process.env;
 function App() {
 
   // make api call here to get information about each rover (number of sol etc)
-  const [rovers, setRovers] = useState([]);
+  const [rovers, setRovers] = useState([{ name: 'default'}]);
+  const [selectedRover, setSelectedRover] = useState(null);
+
   const [numApiCalls, setNumApiCalls] = useState(0);
 
   const [apiError, setApiError] = useState();
@@ -63,7 +65,7 @@ function App() {
 
   return (
     <div className="App">
-      <RoversContext.Provider value={{ rovers }}>
+      <RoversContext.Provider value={{ rovers, selectedRover, setSelectedRover }}>
         <Navbar />
         {/* <ListRoverCameras /> */}
         {/* <ListRoverPhotos /> */}

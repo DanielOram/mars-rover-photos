@@ -12,13 +12,13 @@ export default function ListRovers() {
 
     // const [rovers, setRovers] = useState([]);
 
-    const [selectedRover, setSelectedRover] = useState({cameras: { map: () => {}}});
+    // const [selectedRover, setSelectedRover] = useState({cameras: { map: () => {}}});
 
     // const [numApiCalls, setNumApiCalls] = useState(0);
 
     // const [apiError, setApiError] = useState();
 
-    const { rovers } = useContext(RoversContext);
+    const { rovers, selectedRover, setSelectedRover } = useContext(RoversContext);
 
     // useEffect(() => {
     //     axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers`, {

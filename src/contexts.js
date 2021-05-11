@@ -2,7 +2,9 @@ import { createContext } from 'react';
 
 // Context data
 export const RoversContext = createContext({
-    rovers: []
+    rovers: [],
+    selectedRover: null,
+    setSelectedRover: () => null,
 });
 
 // example json object for rover from api

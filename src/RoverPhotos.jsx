@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { RoversContext } from './contexts';
 
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
@@ -88,13 +89,26 @@ const DisplayPhotos = (props) => {
     // const [earthDay, setEarthDay] = useState(null);
 
 
-    const [ rangeSliderValue, setRangeSliderValue ] = useState(0); 
+    // const [ rangeSliderValue, setRangeSliderValue ] = useState(0); 
     // const [rangeSliderUnit, setRangeSliderUnit] = useState('Martian Sol');
 
     const [numApiCalls, setNumApiCalls] = useState(0);
 
+    const { rovers, selectedRover, setSelectedRover } = useContext(RoversContext);
+
     useEffect(() => {
-        // console.log('useEffect called: ' + sol);
+        // Set selectedRover once App component has updated state if user went straight to /:rover path and did not set rover name 
+        if ((selectedRover === null | selectedRover === undefined) && rovers.length > 0) {
+            setSelectedRover(() => {
+                const rover = rovers.filter(rover => rover.name.toLowerCase() === props.match.params.rover.toLowerCase())[0];
+                return rover;
+            });
+        }
+    },[rovers]);
+
+    useEffect(() => {
+
+        // Call to get photos
         axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/${props.match.params.rover.toLowerCase()}/photos`, {
             params: {
                 "api_key": REACT_APP_NASA_API_KEY,
@@ -217,7 +231,7 @@ const DisplayPhotos = (props) => {
                                 /> */}
                                 <SliderWithInputFormControl 
                                     min={1}
-                                    max={1000}
+                                    max={selectedRover ? selectedRover.max_sol : 1}
                                     initial={sol}
                                     // unit={rangeSliderUnit}
                                     sliderValue={sol}
@@ -351,42 +365,42 @@ export default DisplayPhotos;
 // Parent Component for all Filtering and View Options
 // is a row within the outer container
 
-const FilterViewOptions = (props) => {
+// const FilterViewOptions = (props) => {
 
 
-    return (
-        <div className="row">
-            <div className="col-sm-12">
-                <h2>Filter View Options</h2>
-            </div>
-            {/* RangeSlider for selecting Martian Sol */}
-            <div className="col-sm-12">
-                <MartianSolRangeSlider />
-            </div>
+//     return (
+//         <div className="row">
+//             <div className="col-sm-12">
+//                 <h2>Filter View Options</h2>
+//             </div>
+//             {/* RangeSlider for selecting Martian Sol */}
+//             <div className="col-sm-12">
+//                 <MartianSolRangeSlider />
+//             </div>
 
-            {/* Date selector for selecting Earth date */}
-            <div className="col-sm-12">
-                {/* <EarthDatePicker /> */}
-            </div>
-        </div>
-    );
-}
+//             {/* Date selector for selecting Earth date */}
+//             <div className="col-sm-12">
+//                 {/* <EarthDatePicker /> */}
+//             </div>
+//         </div>
+//     );
+// }
 
 
-const MartianSolRangeSlider = (props) => {
-    return (
-        <h3>MartianSolRangeSlider</h3>
-    )
-}
+// const MartianSolRangeSlider = (props) => {
+//     return (
+//         <h3>MartianSolRangeSlider</h3>
+//     )
+// }
 
-const EarthDatePicker = (props) => {
+// const EarthDatePicker = (props) => {
 
-    return (
-        <>
-            <h3>DatePicker</h3>
-        </>
-    );
-}
+//     return (
+//         <>
+//             <h3>DatePicker</h3>
+//         </>
+//     );
+// }
 
 
 const SliderWithInputFormControl = (props) => {
@@ -428,7 +442,7 @@ const SliderWithInputFormControl = (props) => {
                 <Dropdown.Item eventKey="Martian Sol">Martian Sol</Dropdown.Item>
                 <Dropdown.Item eventKey="Earth Day">Earth Day</Dropdown.Item>
             </DropdownButton> */}
-            <Form.Control value={props.sliderValue}/>
+            <Form.Control value={props.sliderValue} onChange={props.onSliderChange}/>
           </InputGroup>
           
           </Col>
