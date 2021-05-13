@@ -119,9 +119,8 @@ const DisplayPhotos = (props) => {
       .then(res => {
         setPhotos(() => {
             const photo_objects = processPhotoData(res.data);
-            
+            console.log(photo_objects);
             setFilterOptions(() => {return photo_objects.map(photo => {return photo.camera})});
-
             return photo_objects;
         });
         
@@ -199,12 +198,32 @@ const DisplayPhotos = (props) => {
     //       }, {})
     //  }
 
+    // animation setup for CameraPhotoList components
+
+    const cameraPhotoListTransition = useTransition(photos.filter(photo_group => {return filterOptions.includes(photo_group.camera) }), {
+        from: { opacity: 0, maxHeight: 0 },
+        enter: [{ maxHeight: 200 }, { opacity: 1 }],
+        leave: [{ opacity: 0 }, { maxHeight: 0 }],
+        config: { tension: 200 },
+        keys: photo_group => photo_group.name,
+    });
+
+    const fadeInCameraPhotoLists = cameraPhotoListTransition((style, camera_photo_list) => {
+        return (
+            <animated.div style={style}>
+                <CameraPhotoList key={camera_photo_list.camera} photo_group={camera_photo_list} />
+            </animated.div>
+        );
+    });
+
+
     return (
         <>
             <div className="container">
-                <h1>{props.match.params.rover} Photos</h1>
+                {/* <h1>{props.match.params.rover} Photos</h1>
                 <h4>api calls: {numApiCalls}</h4>
                 <p>number of cameras: {photos.length}</p>
+                <p>change camera filter list to be ALL rover cameras. This way camera filter settings will stay between sol change.</p> */}
                 
                 {/* <FilterViewOptions /> */}
 
@@ -282,15 +301,22 @@ const DisplayPhotos = (props) => {
                         {/* Filter Images */}
                         <div className="row">
                             <div className="col">
-                                
-                                {photos.filter(photo_group => {return filterOptions.includes(photo_group.camera) }).map(photo_group => {
+                                {/* sol 597 for Opportunity has no photos */}
+                                {photos.length < 1 && 
+                                    <div className="m-3">
+                                        <h5>There are no photos available for this sol...</h5> 
+                                        <p>This most likely means no photos were taken by this rover on this day.</p>
+                                    </div>
+                                }
+                                {/* {photos.filter(photo_group => {return filterOptions.includes(photo_group.camera) }).map(photo_group => {
                                     return (
                                         <>
                                             {photosLoaded ? (<h1>images loaded</h1>) : (<h1>images loading</h1>)}
                                             <CameraPhotoList photo_group={photo_group} isLoaded={photosLoaded}/>
                                         </>
                                     )
-                                })}
+                                })} */}
+                                {fadeInCameraPhotoLists}
                             </div>
                             
                                 
@@ -323,23 +349,28 @@ const CameraPhotoList = ({ photo_group, isLoaded }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const transition = useTransition(photo_group.photos, {
-        from: { opacity: 0 },
-        enter: { opacity: 1},
-        leave: { opacity: 0 },
-      });
+    // const transition = useTransition(photo_group.photos, {
+    //     from: { opacity: 0 },
+    //     enter: { opacity: 1},
+    //     leave: { opacity: 0 },
+    // });
 
-      const fadeInPhotos = transition((style, photo) => {
-        return (
-          <animated.div style={style}>
-            <Photo photo={photo} />
-          </animated.div>
-        );
-      });
+    // const fadeInPhotos = transition((style, photo) => {
+    //     return (
+    //         <animated.div style={style}>
+    //         <Photo photo={photo} />
+    //         <p>{photo.id}</p>
+    //         </animated.div>
+    //     );
+    // });
+
+    // const [styles, api] = useSpring(() => {
+
+    // })
 
     const handleClick = (event) => {
         event.preventDefault();
-        console.log('clicked');
+        // console.log('clicked');
         setIsExpanded((prev) => !prev);
     }
 
@@ -363,11 +394,11 @@ const CameraPhotoList = ({ photo_group, isLoaded }) => {
                 <h1>Spinning loader..</h1>
             )} */}
 
-            {/* {photo_group.photos.map(photo => (
+            {photo_group.photos.map(photo => (
                 <Photo photo={photo} />
-            ))} */}
+            ))}
 
-            {fadeInPhotos}
+            {/* {fadeInPhotos} */}
 
             
         </div>
