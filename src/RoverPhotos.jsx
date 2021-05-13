@@ -220,10 +220,11 @@ const DisplayPhotos = (props) => {
     return (
         <>
             <div className="container">
-                {/* <h1>{props.match.params.rover} Photos</h1>
+                <h1>{props.match.params.rover} Photos</h1>
                 <h4>api calls: {numApiCalls}</h4>
                 <p>number of cameras: {photos.length}</p>
-                <p>change camera filter list to be ALL rover cameras. This way camera filter settings will stay between sol change.</p> */}
+                <p>change camera filter list to be ALL rover cameras. This way camera filter settings will stay between sol change.</p>
+                <p>change the colour of the badges inside filters. The number of photos doesn't stand out.</p>
                 
                 {/* <FilterViewOptions /> */}
 
@@ -382,7 +383,7 @@ const CameraPhotoList = ({ photo_group, isLoaded }) => {
                 style={{zIndex: 1, position: 'absolute', cursor: 'pointer'}} 
                 className="m-2 text-white bg-primary rounded"
             >
-                <h5 className="m-1 ml-2 mr-2">{photo_group.camera}{isExpanded && <> - {photo_group.name}</>}</h5>
+                <h5 className="m-1 ml-2 mr-2">{photo_group.camera}{isExpanded && <><span style={{paddingLeft: '15px'}}>( {photo_group.name} )</span></>}</h5>
             </div>
             {/* {isLoaded ? (
                 <>
