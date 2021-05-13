@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 // import ListRoverPhotos from './ListRoverPhotos';
 import ListRovers from './ListRovers';
 import RoverPhotos from './RoverPhotos';
+import Footer from './Footer';
 import { RoversContext } from './contexts';
 
 // import Image from './static/img/oranges.jpg';
@@ -79,6 +80,7 @@ function App() {
           <Route exact path="/" component={ListRovers} />
           <Route path="/:rover" component={RoverPhotos} />
         </Switch>
+        <Footer />
       </RoversContext.Provider>
       
       
