@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useSpring, useTransition, animated } from "react-spring";
 import axios from 'axios';
 import { RoversContext } from './contexts';
 
@@ -322,6 +323,20 @@ const CameraPhotoList = ({ photo_group, isLoaded }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const transition = useTransition(photo_group.photos, {
+        from: { opacity: 0 },
+        enter: { opacity: 1},
+        leave: { opacity: 0 },
+      });
+
+      const fadeInPhotos = transition((style, photo) => {
+        return (
+          <animated.div style={style}>
+            <Photo photo={photo} />
+          </animated.div>
+        );
+      });
+
     const handleClick = (event) => {
         event.preventDefault();
         console.log('clicked');
@@ -347,9 +362,12 @@ const CameraPhotoList = ({ photo_group, isLoaded }) => {
             ) : (
                 <h1>Spinning loader..</h1>
             )} */}
-            {photo_group.photos.map(photo => (
+
+            {/* {photo_group.photos.map(photo => (
                 <Photo photo={photo} />
-            ))}
+            ))} */}
+
+            {fadeInPhotos}
 
             
         </div>
