@@ -1,15 +1,26 @@
 {
   "files": {
-    "main.css": "/mars-rover-photos/static/css/main.ca57846c.css",
-    "main.js": "/mars-rover-photos/static/js/main.9e8c657f.js",
-    "static/js/787.22edae46.chunk.js": "/mars-rover-photos/static/js/787.22edae46.chunk.js",
+    "main.css": "/mars-rover-photos/static/css/main.914c03d5.chunk.css",
+    "main.js": "/mars-rover-photos/static/js/main.c279cada.chunk.js",
+    "main.js.map": "/mars-rover-photos/static/js/main.c279cada.chunk.js.map",
+    "runtime-main.js": "/mars-rover-photos/static/js/runtime-main.2e22c468.js",
+    "runtime-main.js.map": "/mars-rover-photos/static/js/runtime-main.2e22c468.js.map",
+    "static/css/2.3a12055d.chunk.css": "/mars-rover-photos/static/css/2.3a12055d.chunk.css",
+    "static/js/2.928e77b4.chunk.js": "/mars-rover-photos/static/js/2.928e77b4.chunk.js",
+    "static/js/2.928e77b4.chunk.js.map": "/mars-rover-photos/static/js/2.928e77b4.chunk.js.map",
+    "static/js/3.41bcd085.chunk.js": "/mars-rover-photos/static/js/3.41bcd085.chunk.js",
+    "static/js/3.41bcd085.chunk.js.map": "/mars-rover-photos/static/js/3.41bcd085.chunk.js.map",
     "index.html": "/mars-rover-photos/index.html",
-    "main.ca57846c.css.map": "/mars-rover-photos/static/css/main.ca57846c.css.map",
-    "main.9e8c657f.js.map": "/mars-rover-photos/static/js/main.9e8c657f.js.map",
-    "787.22edae46.chunk.js.map": "/mars-rover-photos/static/js/787.22edae46.chunk.js.map"
+    "static/css/2.3a12055d.chunk.css.map": "/mars-rover-photos/static/css/2.3a12055d.chunk.css.map",
+    "static/css/main.914c03d5.chunk.css.map": "/mars-rover-photos/static/css/main.914c03d5.chunk.css.map",
+    "static/js/2.928e77b4.chunk.js.LICENSE.txt": "/mars-rover-photos/static/js/2.928e77b4.chunk.js.LICENSE.txt",
+    "static/media/robot.99d3c58e.svg": "/mars-rover-photos/static/media/robot.99d3c58e.svg"
   },
   "entrypoints": [
-    "static/css/main.ca57846c.css",
-    "static/js/main.9e8c657f.js"
+    "static/js/runtime-main.2e22c468.js",
+    "static/css/2.3a12055d.chunk.css",
+    "static/js/2.928e77b4.chunk.js",
+    "static/css/main.914c03d5.chunk.css",
+    "static/js/main.c279cada.chunk.js"
   ]
 }
