@@ -1,19 +1,14 @@
 import './App.css';
-import React, { useState, useEffect, createContext } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import Navbar from './Navbar';
-// import ListRoverCameras from './ListRoverCameras';
-// import ListRoverPhotos from './ListRoverPhotos';
-import ListRovers from './ListRovers';
-import RoverPhotos from './RoverPhotos';
-import Footer from './Footer';
+import Navbar from './components/Navbar';
+import ListRovers from './components/ListRovers';
+import Footer from './components/Footer';
 import { RoversContext } from './contexts';
 
-// import Image from './static/img/oranges.jpg';
-
 // const baseApi = "https://api.nasa.gov/mars-photos/api/v1/"
+
 
 const { REACT_APP_NASA_API_KEY } = process.env;
 
@@ -24,9 +19,7 @@ function App() {
   // make api call here to get information about each rover (number of sol etc)
   const [rovers, setRovers] = useState([{ name: 'default'}]);
   const [selectedRover, setSelectedRover] = useState(null);
-
-  const [numApiCalls, setNumApiCalls] = useState(0);
-
+  const [dateOfPhotos, setDateOfPhotos] = useState(null);
   const [apiError, setApiError] = useState();
 
   useEffect(() => {
@@ -56,7 +49,6 @@ function App() {
             ))
         }
     )))
-    setNumApiCalls((prev) => prev + 1);
   })
   .catch(error => {
     console.log(error.response.data.error);
@@ -66,20 +58,12 @@ function App() {
 
   return (
     <div className="App">
-      <RoversContext.Provider value={{ rovers, selectedRover, setSelectedRover }}>
+      <RoversContext.Provider value={{ rovers, selectedRover, setSelectedRover, dateOfPhotos, setDateOfPhotos }}>
         <Navbar />
-        {/* <ListRoverCameras /> */}
-        {/* <ListRoverPhotos /> */}
-        {/* <ListRovers /> */}
-        ApiCalls: {numApiCalls}
         {apiError && 
             <h4>There was an api error: {apiError}</h4>
         }
-
-        <Switch>
-          <Route exact path="/" component={ListRovers} />
-          <Route path="/:rover" component={RoverPhotos} />
-        </Switch>
+        <ListRovers />
         <Footer />
       </RoversContext.Provider>
       

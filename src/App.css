@@ -1,9 +1,13 @@
-*:hover { 
-   outline:1px blue solid;
- }
-
  .footer {
    border: 1px solid rgba(0,0,0,.1);
    margin-top: 20px;
    overflow-wrap: break-word;
  }
+
+ .photo:hover {
+  opacity: 0.7;
+ }
+
+.featured-rover:not(:hover) > div > svg{
+  opacity: 0.5;
+}

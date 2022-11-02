@@ -1,0 +1,49 @@
+// json input and output formats for reference
+
+
+// const input_json = 
+//     {
+//         "id": 4477,
+//         "sol": 1,
+//         "camera": {
+//             "id": 22,
+//             "name": "MAST",
+//             "rover_id": 5,
+//             "full_name": "Mast Camera"
+//         },
+//         "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/00001/mcam/0001ML0000001000I1_DXXX.jpg",
+//         "earth_date": "2012-08-07",
+//         "rover": {
+//             "id": 5,
+//             "name": "Curiosity",
+//             "landing_date": "2012-08-06",
+//             "launch_date": "2011-11-26",
+//             "status": "active"
+//         }
+//     };
+
+// const output_photo_obj = {
+//     "camera": "EDL_RUCAM",
+//     "name": "Rover Up-Look Camera",
+//     "photos": [
+//       {
+//         "id": 811024,
+//         "sol": 1,
+//         "camera": {
+//           "id": 33,
+//           "name": "EDL_RUCAM",
+//           "full_name": "Rover Up-Look Camera",
+//           "rover_id": 8
+//         },
+//         "img_src": "https://mars.nasa.gov/mars2020-raw-images/pub/ods/surface/sol/00001/ids/edr/browse/edl/EUF_0001_0667022666_963ECV_N0010052EDLC00001_0010LUJ01_1200.jpg",
+//         "earth_date": "2021-02-19",
+//         "rover": {
+//           "id": 8,
+//           "name": "Perseverance",
+//           "landing_date": "2021-02-18",
+//           "launch_date": "2020-07-30",
+//           "status": "active"
+//         }
+//       }
+//     ]
+// };
